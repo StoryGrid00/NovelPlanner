@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Novel Writing Toolkit - Complete Edition</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +48,9 @@
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            touch-action: pan-y pan-x;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
         }
 
         h1, h2, h3, h4, h5, h6 {
@@ -485,8 +488,15 @@
             min-height: 100px;
         }
 
+        .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0;
+        }
+
         .field-table {
             width: 100%;
+            min-width: 500px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             overflow: hidden;
@@ -660,6 +670,14 @@
 
         /* Mobile Responsive Styles */
         @media (max-width: 768px) {
+            .table-wrapper {
+                margin: 0 -12px;
+                padding: 0 12px;
+            }
+
+            .field-table {
+                min-width: 600px;
+            }
             .header {
                 height: 56px;
                 padding: 0 12px;
@@ -736,6 +754,21 @@
             .menu-btn, .icon-btn {
                 min-width: 44px;
                 min-height: 44px;
+            }
+
+            /* Prevent pull-to-refresh on mobile */
+            body {
+                overscroll-behavior-y: contain;
+            }
+
+            .content-area {
+                overscroll-behavior: contain;
+            }
+
+            /* Optimize table scrolling on touch devices */
+            .table-wrapper {
+                -webkit-overflow-scrolling: touch;
+                scroll-behavior: smooth;
             }
         }
 
@@ -2083,8 +2116,9 @@
                     return `
                         <div class="field-group">
                             <label class="field-label">${field.label}</label>
-                            <div class="field-table">
-                                <table>
+                            <div class="table-wrapper">
+                                <div class="field-table">
+                                    <table>
                                     <thead>
                                         <tr>
                                             ${field.columns.map(col => `<th>${col}</th>`).join('')}
@@ -2094,7 +2128,8 @@
                                     <tbody id="${fieldId}-tbody" data-field="${field.id}">
                                         ${renderTableRows(fieldId, field.columns, tableData)}
                                     </tbody>
-                                </table>
+                                    </table>
+                                </div>
                             </div>
                             <div class="table-actions">
                                 <button class="btn-small" onclick="addTableRow('${worksheet.id}', ${instanceIdx}, '${field.id}', ${JSON.stringify(field.columns).replace(/"/g, '&quot;')})">
