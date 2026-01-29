@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Novel Writing Toolkit - Complete Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f7f5f2;
+            --bg-secondary: #fcfbf9;
+            --bg-sidebar: #f2efe9;
+            --text-primary: #3f3d38;
+            --text-secondary: #6b6860;
+            --text-muted: #9a9790;
+            --border-color: #d9d4c8;
+            --accent-primary: #333333;
+            --accent-hover: #1a1a1a;
+            --shadow: rgba(0, 0, 0, 0.08);
+        }
+
+        body.dark-mode {
+            --bg-primary: #262420;
+            --bg-secondary: #2e2a26;
+            --bg-sidebar: #2b2723;
+            --text-primary: #ebe8e3;
+            --text-secondary: #a69f95;
+            --text-muted: #7a7469;
+            --border-color: #474339;
+            --accent-primary: #d9d9d9;
+            --accent-hover: #f0f0f0;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Crimson Text', serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+            height: 100dvh;
+            flex-direction: column;
+        }
+
+        .header {
+            height: 64px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 200;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-btn, .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            min-width: 40px;
+            min-height: 40px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .menu-btn:hover, .icon-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        .menu-btn:active, .icon-btn:active {
+            transform: scale(0.95);
+        }
+
+        .header-title h2 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-title .last-saved {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .save-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-indicator.active {
+            opacity: 1;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            }
+            50% {
+                opacity: 0.8;
+                box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+            }
+        }
+
+        .save-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .peace-of-mind {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .manual-save-btn {
+            padding: 6px 14px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .manual-save-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .manual-save-btn:active {
+            transform: translateY(0) scale(0.95);
+        }
+
+        body.dark-mode .manual-save-btn {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        body.dark-mode .manual-save-btn:hover {
+            background: #000000;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--bg-primary);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        body.dark-mode .btn {
+            background: white;
+            color: #1a1a1a;
+            border-color: #e5e5e5;
+        }
+
+        body.dark-mode .btn:hover {
+            background: #f5f5f5;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 320px;
+            max-width: 85vw;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            z-index: 150;
+            box-shadow: 2px 0 8px var(--shadow);
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 140;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .sidebar-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-header h1 {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-home {
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-family: 'Crimson Text', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-home:hover {
+            background: var(--bg-secondary);
+        }
+
+        .nav-home:active {
+            transform: scale(0.98);
+        }
+
+        .nav-home.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        body.dark-mode .nav-home.active {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        .nav-section {
+            margin-bottom: 16px;
+        }
+
+        .nav-section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-family: 'Crimson Text', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-section-header:hover {
+            background: var(--bg-secondary);
+        }
+
+        .nav-section-header:active {
+            transform: scale(0.98);
+        }
+
+        .nav-section-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-section-chevron {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-section-chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .nav-worksheets {
+            margin-left: 32px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .nav-worksheets.expanded {
+            display: block;
+        }
+
+        .nav-worksheet {
+            padding: 10px 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            margin-bottom: 2px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .nav-worksheet:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .nav-worksheet:active {
+            transform: scale(0.98);
+        }
+
+        .nav-worksheet.active {
+            background: var(--accent-primary);
+            color: white;
+            font-weight: 500;
+        }
+
+        body.dark-mode .nav-worksheet.active {
+            background: white;
+            color: #1a1a1a;
+        }
+
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--bg-primary);
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+
+        .worksheet-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        .worksheet-header {
+            margin-bottom: 32px;
+        }
+
+        .worksheet-header h1 {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .worksheet-header p {
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        .worksheet-header hr {
+            margin-top: 24px;
+            border: none;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .worksheet-fields {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-label {
+            font-family: 'Crimson Text', serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .field-input, .field-textarea {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .field-input:focus, .field-textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .field-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .field-table {
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .field-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .field-table thead {
+            background: var(--bg-sidebar);
+        }
+
+        .field-table th {
+            padding: 12px;
+            text-align: left;
+            font-family: 'Crimson Text', serif;
+            font-size: 14px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .field-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .field-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .field-table input {
+            width: 100%;
+            padding: 6px 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .field-table input:focus {
+            outline: 1px solid var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        .table-actions {
+            margin-top: 12px;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-small:hover {
+            background: var(--bg-primary);
+        }
+
+        .btn-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .btn-delete:hover {
+            color: #dc2626;
+        }
+
+        .field-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-shadow: 0 4px 12px var(--shadow);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .dropdown-item.danger {
+            color: #dc2626;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+            .header {
+                height: 56px;
+                padding: 0 12px;
+            }
+
+            .header-title h2 {
+                font-size: 16px;
+            }
+
+            .header-title .last-saved {
+                font-size: 11px;
+            }
+
+            .manual-save-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .peace-of-mind {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-title h2 {
+                font-size: 14px;
+            }
+
+            .manual-save-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .last-saved {
+                display: none !important;
+            }
+        }
+
+        /* Desktop-specific styles */
+        @media (min-width: 769px) {
+            .sidebar {
+                position: relative;
+                box-shadow: none;
+            }
+
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        /* Landscape mobile optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .header {
+                height: 48px;
+            }
+
+            .sidebar-header {
+                padding: 12px 16px;
+            }
+        }
+
+        /* Touch-friendly improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .menu-btn, .icon-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+        }
+
+        .instance-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .instance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .instance-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .instance-delete {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 13px;
+        }
+
+        .instance-delete:hover {
+            color: #dc2626;
+        }
+
+        .add-instance-btn {
+            padding: 10px 20px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .add-instance-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        body.dark-mode .add-instance-btn {
+            background: #1a1a1a;
+            color: white;
+        }
+
+        body.dark-mode .add-instance-btn:hover {
+            background: #000000;
+        }
+
+        /* Image Upload Styles */
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .image-preview {
+            width: 200px;
+            height: 200px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-preview-placeholder {
+            color: var(--text-muted);
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .image-upload-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+        }
+
+        .image-upload-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        body.dark-mode .image-upload-btn {
+            background: white;
+            color: #1a1a1a;
+            border-color: #e5e5e5;
+        }
+
+        body.dark-mode .image-upload-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .image-remove-btn {
+            padding: 6px 12px;
+            background: none;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .image-remove-btn:hover {
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        body.dark-mode .image-remove-btn {
+            background: white;
+            color: #666666;
+            border-color: #e5e5e5;
+        }
+
+        body.dark-mode .image-remove-btn:hover {
+            background: white;
+            color: #dc2626;
+            border-color: #dc2626;
+        }
+
+        .banner-preview {
+            width: 100%;
+            height: 300px;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .banner-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Home Dashboard Styles */
+        .home-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        .home-header {
+            margin-bottom: 48px;
+        }
+
+        .home-header h1 {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        .home-header p {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .worksheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .worksheet-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body.dark-mode .worksheet-card {
+            background: #3a3a3a;
+            border-color: #4a4a4a;
+        }
+
+        body.dark-mode .worksheet-card-title {
+            color: #ffffff;
+        }
+
+        body.dark-mode .worksheet-card-description {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .worksheet-card-image {
+            background: #2a2a2a;
+        }
+
+        .worksheet-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .worksheet-card-image {
+            width: 100%;
+            height: 160px;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .worksheet-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .worksheet-card-icon {
+            font-size: 48px;
+        }
+
+        .worksheet-card-content {
+            padding: 16px;
+        }
+
+        .worksheet-card-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .worksheet-card-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .worksheet-card-upload {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 6px 10px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .worksheet-card:hover .worksheet-card-upload {
+            opacity: 1;
+        }
+
+        body.dark-mode .worksheet-card-upload {
+            background: #4a4a4a;
+            color: #ffffff;
+            border-color: #5a5a5a;
+        }
+
+        body.dark-mode .worksheet-card-upload:hover {
+            background: #5a5a5a;
+        }
+
+        .section-divider {
+            margin: 48px 0 32px 0;
+        }
+
+        .section-divider h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Gallery Styles */
+        .gallery-controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .gallery-search {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .gallery-filter {
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .gallery-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px var(--shadow);
+        }
+
+        .gallery-item-image {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .gallery-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item-content {
+            padding: 16px;
+        }
+
+        .gallery-item-title {
+            font-family: 'Crimson Text', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .gallery-item-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .gallery-item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .gallery-item-links {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .gallery-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete-item {
+            flex: 1;
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        body.dark-mode .btn-edit {
+            background: white;
+            color: #1a1a1a;
+            border-color: #e5e5e5;
+        }
+
+        body.dark-mode .btn-edit:hover {
+            background: #f5f5f5;
+        }
+
+        body.dark-mode .btn-delete-item {
+            background: white;
+            color: #1a1a1a;
+            border-color: #e5e5e5;
+        }
+
+        .btn-delete-item:hover {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-secondary);
+            min-height: 42px;
+            align-items: center;
+        }
+
+        .tag-input-container input {
+            flex: 1;
+            min-width: 120px;
+            border: none;
+            background: transparent;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .tag-removable {
+            padding: 4px 10px;
+            background: var(--accent-primary);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tag-remove {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-group {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px;
+            background: var(--bg-primary);
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .image-lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .image-lightbox.show {
+            display: flex;
+        }
+
+        .image-lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h14M3 10h14M3 14h14"/>
+                    </svg>
+                </button>
+                <div class="header-title">
+                    <h2>Novel Writing Toolkit</h2>
+                    <div class="last-saved">
+                        <span class="save-indicator" id="saveIndicator"></span>
+                        <span id="lastSaved">Auto-saved</span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="save-controls">
+                    <span class="peace-of-mind">But for Peace of Mind</span>
+                    <button class="manual-save-btn" id="manualSaveBtn" onclick="manualSave()" aria-label="Save manually">
+                        💾 Save Now
+                    </button>
+                </div>
+                <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="10" cy="10" r="4"/>
+                        <path d="M10 2v2M10 16v2M18 10h-2M4 10H2M15.5 4.5l-1.4 1.4M5.9 14.1l-1.4 1.4M15.5 15.5l-1.4-1.4M5.9 5.9L4.5 4.5"/>
+                    </svg>
+                </button>
+                <div class="dropdown">
+                    <button class="btn" id="actionsBtn">
+                        Actions
+                    </button>
+                    <div class="dropdown-menu" id="actionsMenu">
+                        <div class="dropdown-item" id="exportJsonBtn">
+                            <span>📥</span> Export JSON
+                        </div>
+                        <div class="dropdown-item" id="importJsonBtn">
+                            <span>📤</span> Import JSON
+                        </div>
+                        <div class="dropdown-item" id="exportPdfBtn">
+                            <span>📄</span> Export PDF
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item danger" id="clearDataBtn">
+                            <span>🗑️</span> Clear All Data
+                        </div>
+                    </div>
+                </div>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            </div>
+        </header>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <div class="main-content">
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h1>Novel Writing Toolkit</h1>
+                    <p>Your creative companion</p>
+                </div>
+                <nav class="sidebar-nav" id="sidebarNav">
+                </nav>
+            </aside>
+
+            <main class="content-area">
+                <div id="mainContent">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Comprehensive Data Structure
+        const worksheetData = {
+            ideas: {
+                title: 'Ideas & Inspiration',
+                icon: '💡',
+                worksheets: [
+                    {
+                        id: 'finding-idea',
+                        title: 'Finding Your Idea',
+                        description: 'Explore and develop your initial story concept',
+                        fields: [
+                            { id: 'concept', label: 'What is your story about?', type: 'textarea', rows: 4 },
+                            { id: 'inspiration', label: 'What inspired this idea?', type: 'textarea', rows: 3 },
+                            { id: 'unique', label: 'What makes it unique?', type: 'textarea', rows: 3 },
+                            { id: 'hook', label: 'What is the hook?', type: 'textarea', rows: 3 }
+                        ]
+                    },
+                    {
+                        id: 'tropes-list',
+                        title: 'Tropes List',
+                        description: 'Identify and plan tropes to use in your story',
+                        fields: [
+                            { id: 'tropes-table', label: 'Tropes', type: 'table', columns: ['Trope Name', 'How You\'ll Use It', 'Subversion/Twist'] }
+                        ]
+                    },
+                    {
+                        id: 'ideas-list',
+                        title: 'Ideas List',
+                        description: 'Capture all your story ideas',
+                        fields: [
+                            { id: 'ideas-table', label: 'Story Ideas', type: 'table', columns: ['Idea', 'Genre', 'Status', 'Notes'] }
+                        ]
+                    }
+                ]
+            },
+            characters: {
+                title: 'Character Development',
+                icon: '👥',
+                worksheets: [
+                    {
+                        id: 'character-list',
+                        title: 'Character List',
+                        description: 'Track all characters in your novel',
+                        fields: [
+                            { id: 'characters-table', label: 'Characters', type: 'table', columns: ['Name', 'Role', 'Age', 'Brief Description'] }
+                        ]
+                    },
+                    {
+                        id: 'character-sketch',
+                        title: 'Character Sketch',
+                        description: 'Quick character overview - Create one for each character',
+                        multiInstance: true,
+                        hasImage: true,
+                        fields: [
+                            { id: 'image', label: 'Character Image', type: 'image' },
+                            { id: 'name', label: 'Name', type: 'text' },
+                            { id: 'age', label: 'Age', type: 'text' },
+                            { id: 'occupation', label: 'Occupation', type: 'text' },
+                            { id: 'appearance', label: 'Physical Appearance', type: 'textarea', rows: 3 },
+                            { id: 'personality', label: 'Personality in 3 Words', type: 'text' },
+                            { id: 'quirks', label: 'Quirks/Habits', type: 'textarea', rows: 2 },
+                            { id: 'goal', label: 'Primary Goal', type: 'textarea', rows: 2 }
+                        ]
+                    },
+                    {
+                        id: 'main-character',
+                        title: 'Main Character Outline',
+                        description: 'Deep dive into your protagonist',
+                        multiInstance: true,
+                        hasImage: true,
+                        fields: [
+                            { id: 'image', label: 'Character Image', type: 'image' },
+                            { id: 'name', label: 'Full Name', type: 'text' },
+                            { id: 'age', label: 'Age', type: 'text' },
+                            { id: 'occupation', label: 'Occupation', type: 'text' },
+                            { id: 'appearance', label: 'Physical Appearance', type: 'textarea', rows: 3 },
+                            { id: 'personality', label: 'Personality Traits', type: 'textarea', rows: 3 },
+                            { id: 'background', label: 'Background & History', type: 'textarea', rows: 4 },
+                            { id: 'motivation', label: 'Core Motivation', type: 'textarea', rows: 3 }
+                        ]
+                    },
+                    {
+                        id: 'antagonist',
+                        title: 'Antagonist Outline',
+                        description: 'Develop your story\'s opposing force',
+                        multiInstance: true,
+                        hasImage: true,
+                        fields: [
+                            { id: 'image', label: 'Character Image', type: 'image' },
+                            { id: 'name', label: 'Name', type: 'text' },
+                            { id: 'role', label: 'Role/Type of Antagonist', type: 'text' },
+                            { id: 'motivation', label: 'Motivation', type: 'textarea', rows: 3 },
+                            { id: 'methods', label: 'Methods & Tactics', type: 'textarea', rows: 3 }
+                        ]
+                    },
+                    {
+                        id: 'supporting-characters',
+                        title: 'Supporting Character Outline',
+                        description: 'Develop secondary characters',
+                        multiInstance: true,
+                        hasImage: true,
+                        fields: [
+                            { id: 'image', label: 'Character Image', type: 'image' },
+                            { id: 'name', label: 'Name', type: 'text' },
+                            { id: 'role', label: 'Role in Story', type: 'text' },
+                            { id: 'relationship', label: 'Relationship to Protagonist', type: 'textarea', rows: 2 },
+                            { id: 'personality', label: 'Key Personality Traits', type: 'textarea', rows: 3 }
+                        ]
+                    }
+                ]
+            },
+            plot: {
+                title: 'Plot Development',
+                icon: '📊',
+                worksheets: [
+                    {
+                        id: 'beat-sheet',
+                        title: 'Story Beat Sheet',
+                        description: 'Detailed beat-by-beat breakdown',
+                        fields: [
+                            { id: 'opening', label: 'Opening Image', type: 'textarea', rows: 2 },
+                            { id: 'setup', label: 'Setup', type: 'textarea', rows: 3 },
+                            { id: 'catalyst', label: 'Catalyst', type: 'textarea', rows: 2 },
+                            { id: 'midpoint', label: 'Midpoint', type: 'textarea', rows: 2 },
+                            { id: 'finale', label: 'Finale', type: 'textarea', rows: 3 }
+                        ]
+                    },
+                    {
+                        id: 'plot-threads',
+                        title: 'Plot Threads Tracker',
+                        description: 'Track multiple plot threads',
+                        fields: [
+                            { id: 'threads-table', label: 'Plot Threads', type: 'table', columns: ['Thread', 'Status', 'Last Development', 'Next Step'] }
+                        ]
+                    }
+                ]
+            },
+            elements: {
+                title: 'Story Elements',
+                icon: '🎬',
+                worksheets: [
+                    {
+                        id: 'scene-template',
+                        title: 'Scene Template',
+                        description: 'Plan individual scenes',
+                        multiInstance: true,
+                        fields: [
+                            { id: 'scene-number', label: 'Scene Number', type: 'text' },
+                            { id: 'location', label: 'Location', type: 'text' },
+                            { id: 'characters', label: 'Characters Present', type: 'text' },
+                            { id: 'purpose', label: 'Scene Purpose', type: 'textarea', rows: 2 },
+                            { id: 'summary', label: 'Summary', type: 'textarea', rows: 3 }
+                        ]
+                    },
+                    {
+                        id: 'pov-tracker',
+                        title: 'POV Tracker',
+                        description: 'Track POV across scenes/chapters',
+                        fields: [
+                            { id: 'pov-table', label: 'POV by Scene/Chapter', type: 'table', columns: ['Chapter/Scene', 'POV Character', 'Purpose'] }
+                        ]
+                    }
+                ]
+            },
+            worldbuilding: {
+                title: 'Setting & World Building',
+                icon: '🌍',
+                worksheets: [
+                    {
+                        id: 'setting-overview',
+                        title: 'Setting Overview',
+                        description: 'Define your story\'s world',
+                        hasBanner: true,
+                        fields: [
+                            { id: 'banner', label: 'Setting Banner Image', type: 'banner' },
+                            { id: 'time-period', label: 'Time Period', type: 'text' },
+                            { id: 'location', label: 'Primary Location(s)', type: 'text' },
+                            { id: 'geography', label: 'Geography', type: 'textarea', rows: 3 },
+                            { id: 'climate', label: 'Climate/Weather', type: 'textarea', rows: 2 },
+                            { id: 'description', label: 'World Description', type: 'textarea', rows: 4 }
+                        ]
+                    }
+                ]
+            },
+            writing: {
+                title: 'Writing Your Novel',
+                icon: '✍️',
+                worksheets: [
+                    {
+                        id: 'word-count-tracker',
+                        title: 'Daily Word Count Tracker',
+                        description: 'Track daily progress',
+                        fields: [
+                            { id: 'tracker-table', label: 'Daily Progress', type: 'table', columns: ['Date', 'Words Written', 'Cumulative Total'] }
+                        ]
+                    },
+                    {
+                        id: 'goals',
+                        title: 'Goals',
+                        description: 'Set and track writing goals',
+                        fields: [
+                            { id: 'goals-table', label: 'Writing Goals', type: 'table', columns: ['Goal', 'Deadline', 'Progress', 'Status'] }
+                        ]
+                    }
+                ]
+            },
+            research: {
+                title: 'Research',
+                icon: '📚',
+                worksheets: [
+                    {
+                        id: 'research-planner',
+                        title: 'Research Planner',
+                        description: 'Plan research needs',
+                        fields: [
+                            { id: 'topics-table', label: 'Research Topics', type: 'table', columns: ['Topic', 'Why Needed', 'Priority', 'Status'] }
+                        ]
+                    },
+                    {
+                        id: 'research-log',
+                        title: 'Research Log',
+                        description: 'Detailed research notes',
+                        multiInstance: true,
+                        fields: [
+                            { id: 'topic', label: 'Topic', type: 'text' },
+                            { id: 'date', label: 'Date', type: 'text' },
+                            { id: 'source', label: 'Source', type: 'text' },
+                            { id: 'notes', label: 'Research Notes', type: 'textarea', rows: 8 }
+                        ]
+                    },
+                    {
+                        id: 'reference-images',
+                        title: 'Reference Images Library',
+                        description: 'Upload and organize reference images with tags',
+                        isGallery: true
+                    }
+                ]
+            },
+            revision: {
+                title: 'Revision & Editing',
+                icon: '✏️',
+                worksheets: [
+                    {
+                        id: 'feedback-analysis',
+                        title: 'Feedback Analysis',
+                        description: 'Analyze and categorize feedback',
+                        fields: [
+                            { id: 'feedback-table', label: 'Feedback', type: 'table', columns: ['Feedback', 'Source', 'Category', 'Action'] }
+                        ]
+                    },
+                    {
+                        id: 'revision-notes',
+                        title: 'Revision Notes',
+                        description: 'General revision notes',
+                        multiInstance: true,
+                        fields: [
+                            { id: 'chapter', label: 'Chapter/Section', type: 'text' },
+                            { id: 'issue', label: 'Issue Identified', type: 'textarea', rows: 3 },
+                            { id: 'solution', label: 'Proposed Solution', type: 'textarea', rows: 3 }
+                        ]
+                    }
+                ]
+            },
+            notes: {
+                title: 'Notes',
+                icon: '📝',
+                worksheets: [
+                    {
+                        id: 'general-notes',
+                        title: 'General Notes',
+                        description: 'Free-form note taking',
+                        fields: [
+                            { id: 'notes', label: 'Notes', type: 'textarea', rows: 25 }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // State
+        let currentView = 'home';
+        let currentWorksheet = null;
+        let expandedSections = [];
+        let userData = {};
+        let worksheetThumbnails = {};
+        let autoSaveTimeout = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            renderNavigation();
+            renderHome();
+            setupEventListeners();
+            updateLastSaved();
+        });
+
+        // Load data
+        function loadData() {
+            const saved = localStorage.getItem('novel-writing-toolkit-data');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    userData = parsed.worksheets || {};
+                    worksheetThumbnails = parsed.thumbnails || {};
+                    updateLastSaved(new Date(parsed.lastModified));
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                }
+            }
+        }
+
+        // Save data
+        function saveData() {
+            const data = {
+                worksheets: userData,
+                thumbnails: worksheetThumbnails,
+                lastModified: new Date().toISOString(),
+                version: '3.0.0'
+            };
+            localStorage.setItem('novel-writing-toolkit-data', JSON.stringify(data));
+            updateLastSaved();
+        }
+
+        // Auto-save
+        function autoSave() {
+            if (autoSaveTimeout) {
+                clearTimeout(autoSaveTimeout);
+            }
+            autoSaveTimeout = setTimeout(() => {
+                saveData();
+            }, 2000);
+        }
+
+        // Manual save
+        window.manualSave = function() {
+            saveData();
+            const now = new Date();
+            updateLastSaved(now);
+        };
+
+        // Update last saved
+        function updateLastSaved(date) {
+            const lastSavedEl = document.getElementById('lastSaved');
+            const indicator = document.getElementById('saveIndicator');
+            
+            if (date) {
+                lastSavedEl.textContent = `Saved at ${date.toLocaleTimeString()}`;
+            } else {
+                lastSavedEl.textContent = 'Auto-saved';
+            }
+            
+            // Show glowing green indicator
+            indicator.classList.add('active');
+            
+            // Hide indicator after 3 seconds
+            setTimeout(() => {
+                indicator.classList.remove('active');
+            }, 3000);
+        }
+
+        // Render navigation
+        function renderNavigation() {
+            const nav = document.getElementById('sidebarNav');
+            nav.innerHTML = `
+                <div class="nav-home ${currentView === 'home' ? 'active' : ''}" onclick="goHome()">
+                    <span>🏠</span>
+                    <span>Home</span>
+                </div>
+            `;
+
+            Object.keys(worksheetData).forEach(sectionKey => {
+                const section = worksheetData[sectionKey];
+                const isExpanded = expandedSections.includes(sectionKey);
+
+                const sectionEl = document.createElement('div');
+                sectionEl.className = 'nav-section';
+
+                const headerEl = document.createElement('div');
+                headerEl.className = 'nav-section-header';
+                headerEl.innerHTML = `
+                    <span class="nav-section-icon">${section.icon}</span>
+                    <span>${section.title}</span>
+                    <svg class="nav-section-chevron ${isExpanded ? 'expanded' : ''}" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 4l4 4-4 4"/>
+                    </svg>
+                `;
+                headerEl.onclick = () => toggleSection(sectionKey);
+
+                const worksheetsEl = document.createElement('div');
+                worksheetsEl.className = `nav-worksheets ${isExpanded ? 'expanded' : ''}`;
+
+                section.worksheets.forEach(worksheet => {
+                    const worksheetEl = document.createElement('div');
+                    worksheetEl.className = `nav-worksheet ${currentView === 'worksheet' && currentWorksheet === worksheet.id ? 'active' : ''}`;
+                    worksheetEl.textContent = worksheet.title;
+                    worksheetEl.onclick = () => selectWorksheet(worksheet.id);
+                    worksheetsEl.appendChild(worksheetEl);
+                });
+
+                sectionEl.appendChild(headerEl);
+                sectionEl.appendChild(worksheetsEl);
+                nav.appendChild(sectionEl);
+            });
+        }
+
+        // Toggle section
+        function toggleSection(sectionKey) {
+            if (expandedSections.includes(sectionKey)) {
+                expandedSections = expandedSections.filter(s => s !== sectionKey);
+            } else {
+                expandedSections.push(sectionKey);
+            }
+            renderNavigation();
+        }
+
+        // Go home
+        window.goHome = function() {
+            currentView = 'home';
+            currentWorksheet = null;
+            renderNavigation();
+            renderHome();
+            closeSidebarOnMobile();
+        };
+
+        // Select worksheet
+        function selectWorksheet(worksheetId) {
+            currentView = 'worksheet';
+            currentWorksheet = worksheetId;
+            renderNavigation();
+            renderWorksheet(worksheetId);
+            closeSidebarOnMobile();
+        }
+
+        // Close sidebar on mobile
+        function closeSidebarOnMobile() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            }
+        }
+
+        // Render home
+        function renderHome() {
+            const content = document.getElementById('mainContent');
+            
+            let html = `
+                <div class="home-container">
+                    <div class="home-header">
+                        <h1>Novel Writing Toolkit</h1>
+                        <p>Your complete companion for crafting compelling stories</p>
+                    </div>
+            `;
+
+            // Render each section
+            Object.keys(worksheetData).forEach(sectionKey => {
+                const section = worksheetData[sectionKey];
+                
+                html += `
+                    <div class="section-divider">
+                        <h2><span>${section.icon}</span> ${section.title}</h2>
+                    </div>
+                    <div class="worksheet-grid">
+                `;
+
+                section.worksheets.forEach(worksheet => {
+                    const thumbnail = worksheetThumbnails[worksheet.id];
+                    
+                    html += `
+                        <div class="worksheet-card" onclick="selectWorksheet('${worksheet.id}')">
+                            <div class="worksheet-card-image">
+                                ${thumbnail ? `<img src="${thumbnail}" alt="${worksheet.title}">` : `<div class="worksheet-card-icon">${section.icon}</div>`}
+                            </div>
+                            <button class="worksheet-card-upload" onclick="event.stopPropagation(); uploadWorksheetThumbnail('${worksheet.id}')">
+                                📷 Upload
+                            </button>
+                            <div class="worksheet-card-content">
+                                <div class="worksheet-card-title">${worksheet.title}</div>
+                                <div class="worksheet-card-description">${worksheet.description || ''}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            });
+
+            html += `</div>`;
+            content.innerHTML = html;
+        }
+
+        // Upload worksheet thumbnail
+        window.uploadWorksheetThumbnail = function(worksheetId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        worksheetThumbnails[worksheetId] = event.target.result;
+                        saveData();
+                        renderHome();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        };
+
+        // Render worksheet
+        function renderWorksheet(worksheetId) {
+            const worksheet = findWorksheet(worksheetId);
+            if (!worksheet) return;
+
+            const content = document.getElementById('mainContent');
+            
+            if (worksheet.isGallery) {
+                renderGallery();
+                return;
+            }
+            
+            if (worksheet.multiInstance) {
+                const instances = userData[worksheetId] || [];
+                
+                content.innerHTML = `
+                    <div class="worksheet-content">
+                        <div class="worksheet-header">
+                            <h1>${worksheet.title}</h1>
+                            ${worksheet.description ? `<p>${worksheet.description}</p>` : ''}
+                            <hr>
+                        </div>
+                        <div id="instances-container">
+                            ${instances.map((instance, idx) => renderInstance(worksheet, idx, instance)).join('')}
+                        </div>
+                        <button class="add-instance-btn" onclick="addInstance('${worksheetId}')">
+                            <span>+</span> Add ${worksheet.title}
+                        </button>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="worksheet-content">
+                        <div class="worksheet-header">
+                            <h1>${worksheet.title}</h1>
+                            ${worksheet.description ? `<p>${worksheet.description}</p>` : ''}
+                            <hr>
+                        </div>
+                        <div class="worksheet-fields" id="worksheetFields">
+                            ${renderFields(worksheet, 0)}
+                        </div>
+                    </div>
+                `;
+            }
+
+            attachEventListeners(worksheetId, worksheet);
+        }
+
+        // Render instance
+        function renderInstance(worksheet, instanceIdx, instanceData) {
+            const instanceName = instanceData?.name || instanceData?.topic || instanceData?.['scene-number'] || `${worksheet.title} #${instanceIdx + 1}`;
+            
+            return `
+                <div class="instance-card" data-instance="${instanceIdx}">
+                    <div class="instance-header">
+                        <div class="instance-title">${instanceName}</div>
+                        <button class="instance-delete" onclick="deleteInstance('${worksheet.id}', ${instanceIdx})">Delete</button>
+                    </div>
+                    <div class="worksheet-fields">
+                        ${renderFields(worksheet, instanceIdx, instanceData)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render fields
+        function renderFields(worksheet, instanceIdx, instanceData = null) {
+            const data = instanceData || (userData[worksheet.id] || {});
+            
+            return worksheet.fields.map(field => {
+                const fieldId = `${worksheet.id}-${instanceIdx}-${field.id}`;
+                const value = data[field.id] || '';
+
+                if (field.type === 'image') {
+                    return `
+                        <div class="field-group">
+                            <label class="field-label">${field.label}</label>
+                            <div class="image-upload-container">
+                                <div class="image-preview" id="${fieldId}-preview">
+                                    ${value ? `<img src="${value}" alt="Character image">` : `<div class="image-preview-placeholder">No image uploaded</div>`}
+                                </div>
+                                <div style="display: flex; gap: 12px;">
+                                    <button class="image-upload-btn" onclick="uploadImage('${worksheet.id}', ${instanceIdx}, '${field.id}')">
+                                        📷 Upload Image
+                                    </button>
+                                    ${value ? `<button class="image-remove-btn" onclick="removeImage('${worksheet.id}', ${instanceIdx}, '${field.id}')">Remove</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (field.type === 'banner') {
+                    return `
+                        <div class="field-group">
+                            <label class="field-label">${field.label}</label>
+                            <div class="image-upload-container">
+                                <div class="banner-preview" id="${fieldId}-preview">
+                                    ${value ? `<img src="${value}" alt="Banner image">` : `<div class="image-preview-placeholder">No banner uploaded</div>`}
+                                </div>
+                                <div style="display: flex; gap: 12px; margin-top: 12px;">
+                                    <button class="image-upload-btn" onclick="uploadImage('${worksheet.id}', ${instanceIdx}, '${field.id}')">
+                                        🖼️ Upload Banner
+                                    </button>
+                                    ${value ? `<button class="image-remove-btn" onclick="removeImage('${worksheet.id}', ${instanceIdx}, '${field.id}')">Remove</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (field.type === 'text') {
+                    return `
+                        <div class="field-group">
+                            <label class="field-label" for="${fieldId}">${field.label}</label>
+                            <input type="text" class="field-input" id="${fieldId}" value="${escapeHtml(value)}" placeholder="${field.placeholder || ''}" data-field="${field.id}">
+                        </div>
+                    `;
+                } else if (field.type === 'textarea') {
+                    return `
+                        <div class="field-group">
+                            <label class="field-label" for="${fieldId}">${field.label}</label>
+                            <textarea class="field-textarea" id="${fieldId}" rows="${field.rows || 4}" placeholder="${field.placeholder || ''}" data-field="${field.id}">${escapeHtml(value)}</textarea>
+                        </div>
+                    `;
+                } else if (field.type === 'table') {
+                    const tableData = value || [];
+                    return `
+                        <div class="field-group">
+                            <label class="field-label">${field.label}</label>
+                            <div class="field-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            ${field.columns.map(col => `<th>${col}</th>`).join('')}
+                                            <th style="width: 40px;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="${fieldId}-tbody" data-field="${field.id}">
+                                        ${renderTableRows(fieldId, field.columns, tableData)}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-actions">
+                                <button class="btn-small" onclick="addTableRow('${worksheet.id}', ${instanceIdx}, '${field.id}', ${JSON.stringify(field.columns).replace(/"/g, '&quot;')})">
+                                    <span>+</span> Add Row
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else if (field.type === 'checklist') {
+                    const checklistData = value || {};
+                    return `
+                        <div class="field-group">
+                            <label class="field-label">${field.label}</label>
+                            <div class="field-checklist">
+                                ${field.items.map((item, idx) => `
+                                    <div class="checklist-item">
+                                        <input type="checkbox" id="${fieldId}-${idx}" ${checklistData[item] ? 'checked' : ''} data-field="${field.id}" data-item="${item}">
+                                        <label for="${fieldId}-${idx}">${item}</label>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                return '';
+            }).join('');
+        }
+
+        // Render table rows
+        function renderTableRows(fieldId, columns, data) {
+            if (!data || data.length === 0) {
+                return `<tr><td colspan="${columns.length + 1}" style="text-align: center; color: var(--text-muted);">No entries yet</td></tr>`;
+            }
+            return data.map((row, idx) => `
+                <tr data-row="${idx}">
+                    ${columns.map(col => `
+                        <td>
+                            <input type="text" value="${escapeHtml(row[col] || '')}" data-col="${col}">
+                        </td>
+                    `).join('')}
+                    <td>
+                        <button class="btn-delete" onclick="deleteTableRow(this)" aria-label="Delete row">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4l8 8M12 4l-8 8"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Upload image
+        window.uploadImage = function(worksheetId, instanceIdx, fieldId) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // Check file size (limit to 2MB)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('Image size must be less than 2MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        updateFieldValue(worksheetId, instanceIdx, fieldId, event.target.result, findWorksheet(worksheetId).multiInstance);
+                        renderWorksheet(worksheetId);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        };
+
+        // Remove image
+        window.removeImage = function(worksheetId, instanceIdx, fieldId) {
+            updateFieldValue(worksheetId, instanceIdx, fieldId, '', findWorksheet(worksheetId).multiInstance);
+            renderWorksheet(worksheetId);
+        };
+
+        // Attach event listeners
+        function attachEventListeners(worksheetId, worksheet) {
+            const content = document.getElementById('mainContent');
+            
+            // Text and textarea inputs
+            content.querySelectorAll('.field-input, .field-textarea').forEach(el => {
+                el.addEventListener('input', (e) => {
+                    const instanceIdx = getInstanceIndex(e.target);
+                    const fieldId = e.target.dataset.field;
+                    updateFieldValue(worksheetId, instanceIdx, fieldId, e.target.value, worksheet.multiInstance);
+                });
+            });
+
+            // Table inputs
+            content.querySelectorAll('.field-table tbody').forEach(tbody => {
+                tbody.addEventListener('input', (e) => {
+                    if (e.target.tagName === 'INPUT') {
+                        const instanceIdx = getInstanceIndex(e.target);
+                        const fieldId = tbody.dataset.field;
+                        const row = parseInt(e.target.closest('tr').dataset.row);
+                        const col = e.target.dataset.col;
+                        updateTableCell(worksheetId, instanceIdx, fieldId, row, col, e.target.value, worksheet.multiInstance);
+                    }
+                });
+            });
+
+            // Checkboxes
+            content.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', (e) => {
+                    const instanceIdx = getInstanceIndex(e.target);
+                    const fieldId = e.target.dataset.field;
+                    const item = e.target.dataset.item;
+                    updateChecklistItem(worksheetId, instanceIdx, fieldId, item, e.target.checked, worksheet.multiInstance);
+                });
+            });
+        }
+
+        // Get instance index
+        function getInstanceIndex(el) {
+            const card = el.closest('.instance-card');
+            if (card) {
+                return parseInt(card.dataset.instance);
+            }
+            return 0;
+        }
+
+        // Find worksheet
+        function findWorksheet(worksheetId) {
+            for (const sectionKey in worksheetData) {
+                const section = worksheetData[sectionKey];
+                const worksheet = section.worksheets.find(w => w.id === worksheetId);
+                if (worksheet) return worksheet;
+            }
+            return null;
+        }
+
+        // Update field value
+        function updateFieldValue(worksheetId, instanceIdx, fieldId, value, isMultiInstance) {
+            if (isMultiInstance) {
+                if (!userData[worksheetId]) userData[worksheetId] = [];
+                if (!userData[worksheetId][instanceIdx]) userData[worksheetId][instanceIdx] = {};
+                userData[worksheetId][instanceIdx][fieldId] = value;
+            } else {
+                if (!userData[worksheetId]) userData[worksheetId] = {};
+                userData[worksheetId][fieldId] = value;
+            }
+            autoSave();
+        }
+
+        // Update table cell
+        function updateTableCell(worksheetId, instanceIdx, fieldId, row, col, value, isMultiInstance) {
+            if (isMultiInstance) {
+                if (!userData[worksheetId]) userData[worksheetId] = [];
+                if (!userData[worksheetId][instanceIdx]) userData[worksheetId][instanceIdx] = {};
+                if (!userData[worksheetId][instanceIdx][fieldId]) userData[worksheetId][instanceIdx][fieldId] = [];
+                if (!userData[worksheetId][instanceIdx][fieldId][row]) userData[worksheetId][instanceIdx][fieldId][row] = {};
+                userData[worksheetId][instanceIdx][fieldId][row][col] = value;
+            } else {
+                if (!userData[worksheetId]) userData[worksheetId] = {};
+                if (!userData[worksheetId][fieldId]) userData[worksheetId][fieldId] = [];
+                if (!userData[worksheetId][fieldId][row]) userData[worksheetId][fieldId][row] = {};
+                userData[worksheetId][fieldId][row][col] = value;
+            }
+            autoSave();
+        }
+
+        // Update checklist item
+        function updateChecklistItem(worksheetId, instanceIdx, fieldId, item, checked, isMultiInstance) {
+            if (isMultiInstance) {
+                if (!userData[worksheetId]) userData[worksheetId] = [];
+                if (!userData[worksheetId][instanceIdx]) userData[worksheetId][instanceIdx] = {};
+                if (!userData[worksheetId][instanceIdx][fieldId]) userData[worksheetId][instanceIdx][fieldId] = {};
+                userData[worksheetId][instanceIdx][fieldId][item] = checked;
+            } else {
+                if (!userData[worksheetId]) userData[worksheetId] = {};
+                if (!userData[worksheetId][fieldId]) userData[worksheetId][fieldId] = {};
+                userData[worksheetId][fieldId][item] = checked;
+            }
+            autoSave();
+        }
+
+        // Add instance
+        window.addInstance = function(worksheetId) {
+            if (!userData[worksheetId]) userData[worksheetId] = [];
+            userData[worksheetId].push({});
+            saveData();
+            renderWorksheet(worksheetId);
+        };
+
+        // Delete instance
+        window.deleteInstance = function(worksheetId, instanceIdx) {
+            if (confirm('Are you sure you want to delete this entry?')) {
+                userData[worksheetId].splice(instanceIdx, 1);
+                saveData();
+                renderWorksheet(worksheetId);
+            }
+        };
+
+        // Add table row
+        window.addTableRow = function(worksheetId, instanceIdx, fieldId, columns) {
+            const worksheet = findWorksheet(worksheetId);
+            
+            if (worksheet.multiInstance) {
+                if (!userData[worksheetId]) userData[worksheetId] = [];
+                if (!userData[worksheetId][instanceIdx]) userData[worksheetId][instanceIdx] = {};
+                if (!userData[worksheetId][instanceIdx][fieldId]) userData[worksheetId][instanceIdx][fieldId] = [];
+                
+                const newRow = {};
+                columns.forEach(col => newRow[col] = '');
+                userData[worksheetId][instanceIdx][fieldId].push(newRow);
+            } else {
+                if (!userData[worksheetId]) userData[worksheetId] = {};
+                if (!userData[worksheetId][fieldId]) userData[worksheetId][fieldId] = [];
+                
+                const newRow = {};
+                columns.forEach(col => newRow[col] = '');
+                userData[worksheetId][fieldId].push(newRow);
+            }
+            
+            saveData();
+            renderWorksheet(worksheetId);
+        };
+
+        // Delete table row
+        window.deleteTableRow = function(btn) {
+            const row = btn.closest('tr');
+            const rowIndex = parseInt(row.dataset.row);
+            const tbody = btn.closest('tbody');
+            const fieldId = tbody.dataset.field;
+            const instanceIdx = getInstanceIndex(btn);
+            const worksheet = findWorksheet(currentWorksheet);
+            
+            if (worksheet.multiInstance) {
+                if (userData[currentWorksheet]?.[instanceIdx]?.[fieldId]) {
+                    userData[currentWorksheet][instanceIdx][fieldId].splice(rowIndex, 1);
+                }
+            } else {
+                if (userData[currentWorksheet]?.[fieldId]) {
+                    userData[currentWorksheet][fieldId].splice(rowIndex, 1);
+                }
+            }
+            
+            saveData();
+            renderWorksheet(currentWorksheet);
+        };
+
+        // Escape HTML
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Menu button
+            document.getElementById('menuBtn').addEventListener('click', () => {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('sidebarOverlay');
+                sidebar.classList.toggle('hidden');
+                overlay.classList.toggle('show');
+            });
+
+            // Sidebar overlay click - close sidebar
+            document.getElementById('sidebarOverlay').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.add('hidden');
+                document.getElementById('sidebarOverlay').classList.remove('show');
+            });
+
+            // Theme button
+            document.getElementById('themeBtn').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+            });
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+
+            // Actions button
+            document.getElementById('actionsBtn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('actionsMenu').classList.toggle('show');
+            });
+
+            // Close dropdown
+            document.addEventListener('click', () => {
+                document.getElementById('actionsMenu').classList.remove('show');
+            });
+
+            // Export JSON
+            document.getElementById('exportJsonBtn').addEventListener('click', exportJSON);
+
+            // Import JSON
+            document.getElementById('importJsonBtn').addEventListener('click', () => {
+                document.getElementById('importFileInput').click();
+            });
+
+            document.getElementById('importFileInput').addEventListener('change', importJSON);
+
+            // Export PDF
+            document.getElementById('exportPdfBtn').addEventListener('click', exportPDF);
+
+            // Clear data
+            document.getElementById('clearDataBtn').addEventListener('click', clearData);
+        }
+
+        // Export JSON
+        function exportJSON() {
+            const data = {
+                worksheets: userData,
+                thumbnails: worksheetThumbnails,
+                lastModified: new Date().toISOString(),
+                version: '3.0.0'
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `novel-writing-toolkit-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Import JSON
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (data.worksheets) {
+                        userData = data.worksheets;
+                        worksheetThumbnails = data.thumbnails || {};
+                        saveData();
+                        if (currentView === 'home') {
+                            renderHome();
+                        } else {
+                            renderWorksheet(currentWorksheet);
+                        }
+                        alert('Data imported successfully!');
+                    } else {
+                        alert('Invalid file format');
+                    }
+                } catch (error) {
+                    alert('Error importing file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        }
+
+        // Export PDF
+        function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            let yPos = 20;
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const margin = 20;
+            const maxWidth = pageWidth - (margin * 2);
+            
+            // Helper function to add new page if needed
+            function checkPageBreak(requiredSpace = 20) {
+                if (yPos + requiredSpace > pageHeight - margin) {
+                    doc.addPage();
+                    yPos = margin;
+                    return true;
+                }
+                return false;
+            }
+            
+            // Helper function to wrap text
+            function addWrappedText(text, fontSize = 10) {
+                doc.setFontSize(fontSize);
+                const lines = doc.splitTextToSize(text, maxWidth);
+                lines.forEach(line => {
+                    checkPageBreak();
+                    doc.text(line, margin, yPos);
+                    yPos += fontSize * 0.5;
+                });
+                yPos += 3;
+            }
+            
+            // Title page
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text('Novel Writing Toolkit', margin, yPos);
+            yPos += 15;
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Exported: ${new Date().toLocaleString()}`, margin, yPos);
+            yPos += 20;
+            
+            // Iterate through all sections and worksheets
+            Object.keys(worksheetData).forEach(sectionKey => {
+                const section = worksheetData[sectionKey];
+                
+                checkPageBreak(30);
+                
+                // Section header
+                doc.setFontSize(18);
+                doc.setFont(undefined, 'bold');
+                doc.text(`${section.icon} ${section.title}`, margin, yPos);
+                yPos += 12;
+                
+                // Draw line under section
+                doc.setDrawColor(200, 200, 200);
+                doc.line(margin, yPos, pageWidth - margin, yPos);
+                yPos += 8;
+                
+                section.worksheets.forEach(worksheet => {
+                    if (worksheet.isGallery) return; // Skip gallery for now
+                    
+                    const worksheetId = worksheet.id;
+                    const data = userData[worksheetId];
+                    
+                    // Skip if no data
+                    if (!data || (Array.isArray(data) && data.length === 0) || (typeof data === 'object' && Object.keys(data).length === 0)) {
+                        return;
+                    }
+                    
+                    checkPageBreak(25);
+                    
+                    // Worksheet title
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.text(worksheet.title, margin, yPos);
+                    yPos += 8;
+                    
+                    doc.setFont(undefined, 'normal');
+                    
+                    // Handle multi-instance worksheets
+                    if (worksheet.multiInstance && Array.isArray(data)) {
+                        data.forEach((instance, idx) => {
+                            checkPageBreak(20);
+                            
+                            const instanceName = instance.name || instance.topic || instance['scene-number'] || `${worksheet.title} #${idx + 1}`;
+                            
+                            doc.setFontSize(12);
+                            doc.setFont(undefined, 'bold');
+                            doc.text(`• ${instanceName}`, margin + 5, yPos);
+                            yPos += 7;
+                            
+                            doc.setFont(undefined, 'normal');
+                            doc.setFontSize(10);
+                            
+                            // Render fields
+                            worksheet.fields.forEach(field => {
+                                if (field.type === 'image') return; // Skip images
+                                
+                                const value = instance[field.id];
+                                if (!value) return;
+                                
+                                checkPageBreak(15);
+                                
+                                // Field label
+                                doc.setFont(undefined, 'bold');
+                                doc.text(`${field.label}:`, margin + 10, yPos);
+                                yPos += 5;
+                                
+                                doc.setFont(undefined, 'normal');
+                                
+                                // Field value
+                                if (field.type === 'table' && Array.isArray(value)) {
+                                    value.forEach(row => {
+                                        checkPageBreak(10);
+                                        const rowText = Object.values(row).filter(v => v).join(' | ');
+                                        if (rowText) {
+                                            addWrappedText(`  - ${rowText}`, 9);
+                                        }
+                                    });
+                                } else if (field.type === 'checklist' && Array.isArray(value)) {
+                                    value.forEach(item => {
+                                        checkPageBreak(8);
+                                        doc.text(`  ${item.checked ? '☑' : '☐'} ${item.text}`, margin + 10, yPos);
+                                        yPos += 5;
+                                    });
+                                } else if (typeof value === 'string') {
+                                    addWrappedText(value, 10);
+                                }
+                                
+                                yPos += 2;
+                            });
+                            
+                            yPos += 5;
+                        });
+                    } else {
+                        // Handle single-instance worksheets
+                        doc.setFontSize(10);
+                        
+                        worksheet.fields.forEach(field => {
+                            const value = data[field.id];
+                            if (!value) return;
+                            
+                            checkPageBreak(15);
+                            
+                            // Field label
+                            doc.setFont(undefined, 'bold');
+                            doc.text(`${field.label}:`, margin + 5, yPos);
+                            yPos += 5;
+                            
+                            doc.setFont(undefined, 'normal');
+                            
+                            // Field value
+                            if (field.type === 'table' && Array.isArray(value)) {
+                                value.forEach(row => {
+                                    checkPageBreak(10);
+                                    const rowText = Object.values(row).filter(v => v).join(' | ');
+                                    if (rowText) {
+                                        addWrappedText(`  - ${rowText}`, 9);
+                                    }
+                                });
+                            } else if (field.type === 'checklist' && Array.isArray(value)) {
+                                value.forEach(item => {
+                                    checkPageBreak(8);
+                                    doc.text(`  ${item.checked ? '☑' : '☐'} ${item.text}`, margin + 5, yPos);
+                                    yPos += 5;
+                                });
+                            } else if (field.type === 'banner' || field.type === 'image') {
+                                // Skip images in PDF
+                            } else if (typeof value === 'string') {
+                                addWrappedText(value, 10);
+                            }
+                            
+                            yPos += 2;
+                        });
+                    }
+                    
+                    yPos += 8;
+                });
+                
+                yPos += 5;
+            });
+            
+            // Add reference images summary if any
+            loadReferenceImages();
+            if (referenceImages && referenceImages.length > 0) {
+                checkPageBreak(30);
+                
+                doc.setFontSize(18);
+                doc.setFont(undefined, 'bold');
+                doc.text('📚 Reference Images', margin, yPos);
+                yPos += 12;
+                
+                doc.setDrawColor(200, 200, 200);
+                doc.line(margin, yPos, pageWidth - margin, yPos);
+                yPos += 8;
+                
+                doc.setFontSize(10);
+                doc.setFont(undefined, 'normal');
+                
+                referenceImages.forEach((img, idx) => {
+                    checkPageBreak(15);
+                    
+                    doc.setFont(undefined, 'bold');
+                    doc.text(`${idx + 1}. ${img.title || 'Untitled'}`, margin + 5, yPos);
+                    yPos += 6;
+                    
+                    doc.setFont(undefined, 'normal');
+                    
+                    if (img.description) {
+                        addWrappedText(`Description: ${img.description}`, 9);
+                    }
+                    
+                    if (img.tags && img.tags.length > 0) {
+                        doc.text(`Tags: ${img.tags.join(', ')}`, margin + 5, yPos);
+                        yPos += 5;
+                    }
+                    
+                    if (img.linkedWorksheets && img.linkedWorksheets.length > 0) {
+                        const linkedTitles = img.linkedWorksheets.map(wsId => {
+                            const ws = findWorksheet(wsId);
+                            return ws ? ws.title : wsId;
+                        });
+                        doc.text(`Linked to: ${linkedTitles.join(', ')}`, margin + 5, yPos);
+                        yPos += 5;
+                    }
+                    
+                    yPos += 5;
+                });
+            }
+            
+            // Save the PDF
+            doc.save(`novel-writing-toolkit-${new Date().toISOString().split('T')[0]}.pdf`);
+            alert('PDF exported successfully!');
+        }
+
+        // Clear data
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                userData = {};
+                worksheetThumbnails = {};
+                localStorage.removeItem('novel-writing-toolkit-data');
+                if (currentView === 'home') {
+                    renderHome();
+                } else {
+                    renderWorksheet(currentWorksheet);
+                }
+                alert('All data cleared');
+            }
+        }
+
+        // Gallery functions
+        let referenceImages = [];
+        let currentFilter = 'all';
+        let currentSearchTerm = '';
+        let editingImageId = null;
+
+        // Load reference images
+        function loadReferenceImages() {
+            const saved = localStorage.getItem('novel-writing-toolkit-reference-images');
+            if (saved) {
+                try {
+                    referenceImages = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Error loading reference images:', e);
+                }
+            }
+        }
+
+        // Save reference images
+        function saveReferenceImages() {
+            localStorage.setItem('novel-writing-toolkit-reference-images', JSON.stringify(referenceImages));
+        }
+
+        // Get all worksheet options
+        function getAllWorksheetOptions() {
+            const options = [];
+            Object.keys(worksheetData).forEach(sectionKey => {
+                const section = worksheetData[sectionKey];
+                section.worksheets.forEach(worksheet => {
+                    if (!worksheet.isGallery) {
+                        options.push({
+                            id: worksheet.id,
+                            title: `${section.title} > ${worksheet.title}`
+                        });
+                    }
+                });
+            });
+            return options;
+        }
+
+        // Render gallery
+        function renderGallery() {
+            loadReferenceImages();
+            
+            const content = document.getElementById('mainContent');
+            const filteredImages = filterImages();
+            
+            const allTags = [...new Set(referenceImages.flatMap(img => img.tags || []))];
+            const worksheetOptions = getAllWorksheetOptions();
+            
+            content.innerHTML = `
+                <div class="worksheet-content">
+                    <div class="worksheet-header">
+                        <h1>Reference Images Library</h1>
+                        <p>Upload and organize reference images with tags and links to worksheets</p>
+                        <hr>
+                    </div>
+                    
+                    <div class="gallery-controls">
+                        <input type="text" class="gallery-search" id="gallerySearch" placeholder="Search by title, description, or tags..." value="${currentSearchTerm}">
+                        <select class="gallery-filter" id="galleryFilter">
+                            <option value="all" ${currentFilter === 'all' ? 'selected' : ''}>All Images</option>
+                            ${allTags.map(tag => `<option value="tag:${tag}" ${currentFilter === `tag:${tag}` ? 'selected' : ''}>${tag}</option>`).join('')}
+                            ${worksheetOptions.map(ws => `<option value="worksheet:${ws.id}" ${currentFilter === `worksheet:${ws.id}` ? 'selected' : ''}>Linked to: ${ws.title}</option>`).join('')}
+                        </select>
+                        <button class="btn" onclick="openAddImageModal()">+ Add Image</button>
+                    </div>
+                    
+                    ${filteredImages.length === 0 ? `
+                        <div style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📷</div>
+                            <div style="font-size: 18px; margin-bottom: 8px;">No reference images yet</div>
+                            <div style="font-size: 14px;">Click "+ Add Image" to upload your first reference image</div>
+                        </div>
+                    ` : `
+                        <div class="gallery-grid">
+                            ${filteredImages.map(img => renderGalleryItem(img)).join('')}
+                        </div>
+                    `}
+                </div>
+                
+                <!-- Add/Edit Image Modal -->
+                <div class="modal" id="imageModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 id="modalTitle">Add Reference Image</h2>
+                            <button class="modal-close" onclick="closeImageModal()">×</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="field-group" style="margin-bottom: 20px;">
+                                <label class="field-label">Image</label>
+                                <div class="image-preview" id="modalImagePreview" style="width: 100%; height: 300px;">
+                                    <div class="image-preview-placeholder">No image selected</div>
+                                </div>
+                                <button class="image-upload-btn" style="margin-top: 12px;" onclick="selectImageForModal()">📷 Select Image</button>
+                                <input type="file" id="modalImageInput" accept="image/*" style="display: none;">
+                            </div>
+                            
+                            <div class="field-group" style="margin-bottom: 20px;">
+                                <label class="field-label" for="modalImageTitle">Title</label>
+                                <input type="text" class="field-input" id="modalImageTitle" placeholder="Enter image title">
+                            </div>
+                            
+                            <div class="field-group" style="margin-bottom: 20px;">
+                                <label class="field-label" for="modalImageDescription">Description</label>
+                                <textarea class="field-textarea" id="modalImageDescription" rows="3" placeholder="Enter image description"></textarea>
+                            </div>
+                            
+                            <div class="field-group" style="margin-bottom: 20px;">
+                                <label class="field-label">Tags</label>
+                                <div class="tag-input-container" id="tagInputContainer">
+                                    <input type="text" id="tagInput" placeholder="Type and press Enter to add tags">
+                                </div>
+                            </div>
+                            
+                            <div class="field-group">
+                                <label class="field-label">Link to Worksheets</label>
+                                <div class="checkbox-group" id="worksheetLinksContainer">
+                                    ${worksheetOptions.map(ws => `
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="ws-${ws.id}" value="${ws.id}">
+                                            <label for="ws-${ws.id}">${ws.title}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn" onclick="closeImageModal()">Cancel</button>
+                            <button class="btn" style="background: var(--accent-primary); color: white;" onclick="saveImage()">Save Image</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Image Lightbox -->
+                <div class="image-lightbox" id="imageLightbox" onclick="closeLightbox()">
+                    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+                    <img id="lightboxImage" src="" alt="">
+                </div>
+            `;
+            
+            // Attach event listeners
+            document.getElementById('gallerySearch').addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value;
+                renderGallery();
+            });
+            
+            document.getElementById('galleryFilter').addEventListener('change', (e) => {
+                currentFilter = e.target.value;
+                renderGallery();
+            });
+            
+            document.getElementById('modalImageInput').addEventListener('change', handleModalImageUpload);
+            document.getElementById('tagInput').addEventListener('keypress', handleTagInput);
+        }
+
+        // Filter images
+        function filterImages() {
+            let filtered = referenceImages;
+            
+            // Apply search
+            if (currentSearchTerm) {
+                const term = currentSearchTerm.toLowerCase();
+                filtered = filtered.filter(img => 
+                    img.title?.toLowerCase().includes(term) ||
+                    img.description?.toLowerCase().includes(term) ||
+                    img.tags?.some(tag => tag.toLowerCase().includes(term))
+                );
+            }
+            
+            // Apply filter
+            if (currentFilter && currentFilter !== 'all') {
+                if (currentFilter.startsWith('tag:')) {
+                    const tag = currentFilter.substring(4);
+                    filtered = filtered.filter(img => img.tags?.includes(tag));
+                } else if (currentFilter.startsWith('worksheet:')) {
+                    const worksheetId = currentFilter.substring(10);
+                    filtered = filtered.filter(img => img.linkedWorksheets?.includes(worksheetId));
+                }
+            }
+            
+            return filtered;
+        }
+
+        // Render gallery item
+        function renderGalleryItem(img) {
+            const linkedWorksheets = img.linkedWorksheets || [];
+            const linkedTitles = linkedWorksheets.map(wsId => {
+                const ws = findWorksheet(wsId);
+                return ws ? ws.title : wsId;
+            });
+            
+            return `
+                <div class="gallery-item">
+                    <div class="gallery-item-image" onclick="openLightbox('${img.id}')">
+                        <img src="${img.image}" alt="${escapeHtml(img.title || 'Reference image')}">
+                    </div>
+                    <div class="gallery-item-content">
+                        <div class="gallery-item-title">${escapeHtml(img.title || 'Untitled')}</div>
+                        ${img.description ? `<div class="gallery-item-description">${escapeHtml(img.description)}</div>` : ''}
+                        ${img.tags && img.tags.length > 0 ? `
+                            <div class="gallery-item-tags">
+                                ${img.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        ${linkedTitles.length > 0 ? `
+                            <div class="gallery-item-links">
+                                🔗 Linked to: ${linkedTitles.join(', ')}
+                            </div>
+                        ` : ''}
+                        <div class="gallery-item-actions">
+                            <button class="btn-edit" onclick="editImage('${img.id}')">Edit</button>
+                            <button class="btn-delete-item" onclick="deleteImage('${img.id}')">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Open add image modal
+        window.openAddImageModal = function() {
+            editingImageId = null;
+            document.getElementById('modalTitle').textContent = 'Add Reference Image';
+            document.getElementById('modalImagePreview').innerHTML = '<div class="image-preview-placeholder">No image selected</div>';
+            document.getElementById('modalImageTitle').value = '';
+            document.getElementById('modalImageDescription').value = '';
+            document.getElementById('tagInputContainer').innerHTML = '<input type="text" id="tagInput" placeholder="Type and press Enter to add tags">';
+            document.getElementById('tagInput').addEventListener('keypress', handleTagInput);
+            
+            // Uncheck all worksheets
+            document.querySelectorAll('#worksheetLinksContainer input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            document.getElementById('imageModal').classList.add('show');
+        };
+
+        // Edit image
+        window.editImage = function(imageId) {
+            const img = referenceImages.find(i => i.id === imageId);
+            if (!img) return;
+            
+            editingImageId = imageId;
+            document.getElementById('modalTitle').textContent = 'Edit Reference Image';
+            document.getElementById('modalImagePreview').innerHTML = `<img src="${img.image}" alt="">`;
+            document.getElementById('modalImageTitle').value = img.title || '';
+            document.getElementById('modalImageDescription').value = img.description || '';
+            
+            // Render existing tags
+            const tagContainer = document.getElementById('tagInputContainer');
+            tagContainer.innerHTML = '';
+            (img.tags || []).forEach(tag => {
+                const tagEl = document.createElement('span');
+                tagEl.className = 'tag-removable';
+                tagEl.innerHTML = `${escapeHtml(tag)} <button class="tag-remove" onclick="removeTag(this)">×</button>`;
+                tagContainer.appendChild(tagEl);
+            });
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'tagInput';
+            input.placeholder = 'Type and press Enter to add tags';
+            input.addEventListener('keypress', handleTagInput);
+            tagContainer.appendChild(input);
+            
+            // Check linked worksheets
+            document.querySelectorAll('#worksheetLinksContainer input[type="checkbox"]').forEach(cb => {
+                cb.checked = (img.linkedWorksheets || []).includes(cb.value);
+            });
+            
+            document.getElementById('imageModal').classList.add('show');
+        };
+
+        // Close image modal
+        window.closeImageModal = function() {
+            document.getElementById('imageModal').classList.remove('show');
+            editingImageId = null;
+        };
+
+        // Select image for modal
+        window.selectImageForModal = function() {
+            document.getElementById('modalImageInput').click();
+        };
+
+        // Handle modal image upload
+        function handleModalImageUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('Image size must be less than 2MB');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById('modalImagePreview').innerHTML = `<img src="${event.target.result}" alt="">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Handle tag input
+        function handleTagInput(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const input = e.target;
+                const tag = input.value.trim();
+                if (tag) {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag-removable';
+                    tagEl.innerHTML = `${escapeHtml(tag)} <button class="tag-remove" onclick="removeTag(this)">×</button>`;
+                    input.parentElement.insertBefore(tagEl, input);
+                    input.value = '';
+                }
+            }
+        }
+
+        // Remove tag
+        window.removeTag = function(btn) {
+            btn.parentElement.remove();
+        };
+
+        // Save image
+        window.saveImage = function() {
+            const preview = document.getElementById('modalImagePreview');
+            const imgEl = preview.querySelector('img');
+            if (!imgEl) {
+                alert('Please select an image');
+                return;
+            }
+            
+            const title = document.getElementById('modalImageTitle').value.trim();
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+            
+            const description = document.getElementById('modalImageDescription').value.trim();
+            
+            // Get tags
+            const tags = [];
+            document.querySelectorAll('#tagInputContainer .tag-removable').forEach(tagEl => {
+                const tagText = tagEl.textContent.replace('×', '').trim();
+                if (tagText) tags.push(tagText);
+            });
+            
+            // Get linked worksheets
+            const linkedWorksheets = [];
+            document.querySelectorAll('#worksheetLinksContainer input[type="checkbox"]:checked').forEach(cb => {
+                linkedWorksheets.push(cb.value);
+            });
+            
+            const imageData = {
+                id: editingImageId || Date.now().toString(),
+                image: imgEl.src,
+                title,
+                description,
+                tags,
+                linkedWorksheets,
+                createdAt: editingImageId ? referenceImages.find(i => i.id === editingImageId)?.createdAt : new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            if (editingImageId) {
+                const index = referenceImages.findIndex(i => i.id === editingImageId);
+                if (index !== -1) {
+                    referenceImages[index] = imageData;
+                }
+            } else {
+                referenceImages.push(imageData);
+            }
+            
+            saveReferenceImages();
+            closeImageModal();
+            renderGallery();
+        };
+
+        // Delete image
+        window.deleteImage = function(imageId) {
+            if (confirm('Are you sure you want to delete this reference image?')) {
+                referenceImages = referenceImages.filter(i => i.id !== imageId);
+                saveReferenceImages();
+                renderGallery();
+            }
+        };
+
+        // Open lightbox
+        window.openLightbox = function(imageId) {
+            const img = referenceImages.find(i => i.id === imageId);
+            if (img) {
+                document.getElementById('lightboxImage').src = img.image;
+                document.getElementById('imageLightbox').classList.add('show');
+            }
+        };
+
+        // Close lightbox
+        window.closeLightbox = function() {
+            document.getElementById('imageLightbox').classList.remove('show');
+        };
+    </script>
+</body>
+</html>
