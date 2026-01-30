@@ -2545,32 +2545,43 @@
             }
             
             // Title page
-            doc.setFontSize(24);
+            doc.setFontSize(28);
             doc.setFont(undefined, 'bold');
-            doc.text('Novel Writing Toolkit', margin, yPos);
-            yPos += 15;
+            doc.text('Novel Writing Toolkit', pageWidth / 2, yPos, { align: 'center' });
+            yPos += 10;
             
-            doc.setFontSize(12);
+            doc.setFontSize(14);
             doc.setFont(undefined, 'normal');
-            doc.text(`Exported: ${new Date().toLocaleString()}`, margin, yPos);
+            doc.text('Complete Edition', pageWidth / 2, yPos, { align: 'center' });
             yPos += 20;
+            
+            doc.setFontSize(10);
+            doc.setTextColor(100, 100, 100);
+            doc.text(`Exported: ${new Date().toLocaleString()}`, pageWidth / 2, yPos, { align: 'center' });
+            doc.setTextColor(0, 0, 0);
+            yPos += 25;
             
             // Iterate through all sections and worksheets
             Object.keys(worksheetData).forEach(sectionKey => {
                 const section = worksheetData[sectionKey];
                 
-                checkPageBreak(30);
+                checkPageBreak(35);
                 
-                // Section header
-                doc.setFontSize(18);
+                // Section header with better spacing
+                yPos += 5;
+                doc.setFontSize(16);
                 doc.setFont(undefined, 'bold');
-                doc.text(`${section.icon} ${section.title}`, margin, yPos);
-                yPos += 12;
+                doc.setTextColor(50, 50, 50);
+                doc.text(section.title.toUpperCase(), margin, yPos);
+                doc.setTextColor(0, 0, 0);
+                yPos += 8;
                 
                 // Draw line under section
-                doc.setDrawColor(200, 200, 200);
+                doc.setDrawColor(150, 150, 150);
+                doc.setLineWidth(0.5);
                 doc.line(margin, yPos, pageWidth - margin, yPos);
-                yPos += 8;
+                doc.setLineWidth(0.2);
+                yPos += 10;
                 
                 section.worksheets.forEach(worksheet => {
                     if (worksheet.isGallery) return; // Skip gallery for now
@@ -2586,10 +2597,12 @@
                     checkPageBreak(25);
                     
                     // Worksheet title
-                    doc.setFontSize(14);
+                    doc.setFontSize(12);
                     doc.setFont(undefined, 'bold');
+                    doc.setTextColor(40, 40, 40);
                     doc.text(worksheet.title, margin, yPos);
-                    yPos += 8;
+                    doc.setTextColor(0, 0, 0);
+                    yPos += 10;
                     
                     doc.setFont(undefined, 'normal');
                     
@@ -2600,10 +2613,12 @@
                             
                             const instanceName = instance.name || instance.topic || instance['scene-number'] || `${worksheet.title} #${idx + 1}`;
                             
-                            doc.setFontSize(12);
+                            doc.setFontSize(11);
                             doc.setFont(undefined, 'bold');
+                            doc.setTextColor(60, 60, 60);
                             doc.text(`• ${instanceName}`, margin + 5, yPos);
-                            yPos += 7;
+                            doc.setTextColor(0, 0, 0);
+                            yPos += 8;
                             
                             doc.setFont(undefined, 'normal');
                             doc.setFontSize(10);
@@ -2636,7 +2651,7 @@
                                 } else if (field.type === 'checklist' && Array.isArray(value)) {
                                     value.forEach(item => {
                                         checkPageBreak(8);
-                                        doc.text(`  ${item.checked ? '☑' : '☐'} ${item.text}`, margin + 10, yPos);
+                                        doc.text(`  ${item.checked ? '[X]' : '[ ]'} ${item.text}`, margin + 10, yPos);
                                         yPos += 5;
                                     });
                                 } else if (typeof value === 'string') {
@@ -2677,7 +2692,7 @@
                             } else if (field.type === 'checklist' && Array.isArray(value)) {
                                 value.forEach(item => {
                                     checkPageBreak(8);
-                                    doc.text(`  ${item.checked ? '☑' : '☐'} ${item.text}`, margin + 5, yPos);
+                                    doc.text(`  ${item.checked ? '[X]' : '[ ]'} ${item.text}`, margin + 5, yPos);
                                     yPos += 5;
                                 });
                             } else if (field.type === 'banner' || field.type === 'image') {
@@ -2699,16 +2714,22 @@
             // Add reference images summary if any
             loadReferenceImages();
             if (referenceImages && referenceImages.length > 0) {
-                checkPageBreak(30);
+                checkPageBreak(35);
                 
-                doc.setFontSize(18);
+                // Reference Images section header
+                yPos += 5;
+                doc.setFontSize(16);
                 doc.setFont(undefined, 'bold');
-                doc.text('📚 Reference Images', margin, yPos);
-                yPos += 12;
-                
-                doc.setDrawColor(200, 200, 200);
-                doc.line(margin, yPos, pageWidth - margin, yPos);
+                doc.setTextColor(50, 50, 50);
+                doc.text('REFERENCE IMAGES', margin, yPos);
+                doc.setTextColor(0, 0, 0);
                 yPos += 8;
+                
+                doc.setDrawColor(150, 150, 150);
+                doc.setLineWidth(0.5);
+                doc.line(margin, yPos, pageWidth - margin, yPos);
+                doc.setLineWidth(0.2);
+                yPos += 10;
                 
                 doc.setFontSize(10);
                 doc.setFont(undefined, 'normal');
