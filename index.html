@@ -984,6 +984,59 @@
             color: var(--text-secondary);
         }
 
+        .novel-name-container {
+            margin-top: 32px;
+            max-width: 600px;
+        }
+
+        .novel-name-container label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .novel-name-input {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 18px;
+            font-family: 'Crimson Text', serif;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease;
+        }
+
+        .novel-name-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(51, 51, 51, 0.1);
+        }
+
+        body.dark-mode .novel-name-input:focus {
+            box-shadow: 0 0 0 3px rgba(217, 217, 217, 0.1);
+        }
+
+        .novel-name-input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Screen reader only class for 508 compliance */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
         .worksheet-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -1436,7 +1489,7 @@
                     </svg>
                 </button>
                 <div class="header-title">
-                    <h2>Novel Writing Toolkit</h2>
+                    <h2 id="header-title-text">Novel Writing Toolkit</h2>
                     <div class="last-saved">
                         <span class="save-indicator" id="saveIndicator"></span>
                         <span id="lastSaved">Auto-saved</span>
@@ -1796,6 +1849,7 @@
             renderHome();
             setupEventListeners();
             updateLastSaved();
+            updateHeaderTitle();
         });
 
         // Load data
@@ -1862,6 +1916,20 @@
             }, 3000);
         }
 
+        // Update header title with novel name
+        function updateHeaderTitle() {
+            const headerTitle = document.getElementById('header-title-text');
+            const novelName = userData['novel-name'];
+            
+            if (headerTitle) {
+                if (novelName && novelName.trim()) {
+                    headerTitle.textContent = novelName;
+                } else {
+                    headerTitle.textContent = 'Novel Writing Toolkit';
+                }
+            }
+        }
+
         // Render navigation
         function renderNavigation() {
             const nav = document.getElementById('sidebarNav');
@@ -1923,6 +1991,7 @@
             currentWorksheet = null;
             renderNavigation();
             renderHome();
+            updateHeaderTitle();
             closeSidebarOnMobile();
         };
 
@@ -1947,11 +2016,27 @@
         function renderHome() {
             const content = document.getElementById('mainContent');
             
+            const novelName = userData['novel-name'] || '';
+            
             let html = `
                 <div class="home-container">
                     <div class="home-header">
                         <h1>Novel Writing Toolkit</h1>
                         <p>Your complete companion for crafting compelling stories</p>
+                        <div class="novel-name-container">
+                            <label for="novel-name-input" id="novel-name-label">Your Novel's Title</label>
+                            <input 
+                                type="text" 
+                                id="novel-name-input" 
+                                class="novel-name-input" 
+                                value="${novelName}" 
+                                placeholder="Enter your novel's title here..."
+                                aria-labelledby="novel-name-label"
+                                aria-describedby="novel-name-description"
+                                maxlength="200"
+                            />
+                            <span id="novel-name-description" class="sr-only">Enter the title of your novel. This will be saved automatically and used throughout your project.</span>
+                        </div>
                     </div>
             `;
 
@@ -1990,6 +2075,29 @@
 
             html += `</div>`;
             content.innerHTML = html;
+            
+            // Add event listener for novel name input
+            const novelNameInput = document.getElementById('novel-name-input');
+            if (novelNameInput) {
+                // Save on input with debouncing
+                let saveTimeout;
+                novelNameInput.addEventListener('input', function(e) {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(() => {
+                        userData['novel-name'] = e.target.value.trim();
+                        saveData();
+                        updateHeaderTitle();
+                    }, 500);
+                });
+                
+                // Also save on blur for immediate save when leaving field
+                novelNameInput.addEventListener('blur', function(e) {
+                    clearTimeout(saveTimeout);
+                    userData['novel-name'] = e.target.value.trim();
+                    saveData();
+                    updateHeaderTitle();
+                });
+            }
         }
 
         // Upload worksheet thumbnail
